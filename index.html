@@ -1,252 +1,381 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-  <head>
-    <!-- Required meta tags always come first -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/css/bootstrap.min.css" integrity="sha384-y3tfxAZXuh4HwSYylfB+J125MxIs6mR5FOHamPBG064zB+AFeWH94NdvaCBm8qnd" crossorigin="anonymous">
-    <title>Vitalii Galkin</title>
-    <link rel="shortcut icon" href="http://placehold.it/64x64">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Sign in with Apple test page</title>
+<style>
+  :root {
+    --bg: #f5f5f7;
+    --card: #ffffff;
+    --text: #1d1d1f;
+    --muted: #6e6e73;
+    --border: #d2d2d7;
+    --accent: #0071e3;
+    --code-bg: #f0f0f3;
+    --ok: #1a7f37;
+    --bad: #c62828;
+    --warn-bg: #fff4e5;
+    --warn-text: #8a4b00;
+    --apple-bg: #000000;
+    --apple-text: #ffffff;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #000000;
+      --card: #1c1c1e;
+      --text: #f5f5f7;
+      --muted: #98989d;
+      --border: #3a3a3c;
+      --accent: #2997ff;
+      --code-bg: #2c2c2e;
+      --ok: #3fb950;
+      --bad: #ff6961;
+      --warn-bg: #3a2a10;
+      --warn-text: #ffd28a;
+      --apple-bg: #ffffff;
+      --apple-text: #000000;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font: 16px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  main { max-width: 720px; margin: 0 auto; padding: 32px 16px 64px; }
+  h1 { font-size: 1.6rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 12px; }
+  .sub { color: var(--muted); margin: 0 0 24px; }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+  label { display: block; font-weight: 600; font-size: .9rem; margin: 12px 0 4px; }
+  .hint, .meta { color: var(--muted); font-size: .85rem; margin: 4px 0 0; }
+  input[type=text] {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--card);
+    color: var(--text);
+    font: .9rem ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+  input:focus-visible, button:focus-visible, summary:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+  .row { display: flex; gap: 8px; align-items: stretch; }
+  .row input { flex: 1; min-width: 0; }
+  .scopes { display: flex; gap: 16px; margin-top: 4px; }
+  .scopes label { display: flex; gap: 6px; align-items: center; font-weight: 400; margin: 0; }
+  button { font: inherit; cursor: pointer; }
+  .apple {
+    width: 100%;
+    padding: 12px 16px;
+    border: 0;
+    border-radius: 10px;
+    background: var(--apple-bg);
+    color: var(--apple-text);
+    font-weight: 600;
+    font-size: 1.05rem;
+  }
+  .apple:disabled { opacity: .6; cursor: progress; }
+  .ghost {
+    padding: 6px 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: transparent;
+    color: var(--text);
+    font-size: .85rem;
+    white-space: nowrap;
+  }
+  pre {
+    margin: 0;
+    padding: 12px;
+    background: var(--code-bg);
+    border-radius: 8px;
+    overflow-x: auto;
+    font: .85rem/1.45 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    white-space: pre-wrap;
+    word-break: break-all;
+  }
+  code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    background: var(--code-bg);
+    padding: 1px 5px;
+    border-radius: 4px;
+    font-size: .88em;
+  }
+  .banner { border-radius: 10px; padding: 12px 14px; margin-bottom: 16px; font-size: .92rem; }
+  .warn { background: var(--warn-bg); color: var(--warn-text); }
+  .error { border: 1px solid var(--bad); color: var(--bad); }
+  .ok { color: var(--ok); }
+  .bad { color: var(--bad); }
+  .field-head { display: flex; justify-content: space-between; align-items: center; margin: 16px 0 6px; gap: 8px; }
+  .field-head strong { font-size: .9rem; }
+  summary { cursor: pointer; font-weight: 600; }
+  ol { padding-left: 20px; }
+  li { margin: 8px 0; }
+  [hidden] { display: none !important; }
+</style>
 </head>
-<body class="resume">
-<div class="container">
+<body>
+<main>
+  <h1>Sign in with Apple test page</h1>
+  <p class="sub">Sign in once to get an authorization code you can try against your backend.</p>
+
+  <div id="envWarning" class="banner warn" hidden>
+    Apple only accepts HTTPS return URLs on a real domain. This page won’t work from
+    <code>file://</code>, <code>localhost</code> or plain HTTP: host it on HTTPS first.
+  </div>
+
+  <section class="card">
+    <h2>1. Configuration</h2>
+
+    <label for="clientId">Services ID (client ID)</label>
+    <input id="clientId" type="text" placeholder="com.example.app.web" autocomplete="off" spellcheck="false">
+
+    <label for="redirectUri">Redirect URI</label>
     <div class="row">
-        <div class="col-md-12">
-            <h1><a href="https://bruno.renie.fr/">Vitalii Galkin</a></h1>
-
-            <h2>Software developer</h2>
-        </div>
+      <input id="redirectUri" type="text" autocomplete="off" spellcheck="false">
+      <button class="ghost" type="button" data-copy="redirectUri">Copy</button>
     </div>
-    <article>
-        <h2>Objectives</h2>
+    <p class="hint">
+      Must match a Return URL registered for the Services ID exactly. Domain to register:
+      <code id="regDomain"></code>
+    </p>
 
-        <div class="row">
-            <div class="col-xs-12 col-md-3 col-sm-3">
-                English
-            </div>
-            <div class="col-xs-12 col-md-9 col-sm-9">
-                Fluent. TOEIC: 940.
-            </div>
-        </div>
+    <label>Scopes</label>
+    <div class="scopes">
+      <label><input type="checkbox" name="scope" value="name" checked> name</label>
+      <label><input type="checkbox" name="scope" value="email" checked> email</label>
+    </div>
+  </section>
 
-    </article>
-    <article>
-        <h4>Professional experience</h4>
+  <section class="card">
+    <h2>2. Sign in</h2>
+    <button id="signIn" class="apple" type="button">Sign in with Apple</button>
+    <p class="hint">Opens Apple’s popup, so allow popups for this page.</p>
+    <div id="error" class="banner error" role="alert" hidden style="margin: 12px 0 0"></div>
+  </section>
 
-        <div class="row">
-            <div class="col-xs-12 col-md-3 col-sm-3">
-                August 2013-present
-            </div>
-            <div class="col-xs-12 col-md-9 col-sm-9">
-                <a href="http://www.exoscale.ch/">Exoscale</a>, Lausanne (CH). <strong>Lead developer</strong>.
-                Development and operation of Exoscale products, the customer portal and internal services. Python
-                (Django, Flask, asyncio), JavaScript (AngularJS, React), Clojure/ClojureScript (Om).
-            </div>
-        </div>
+  <section id="result" class="card" hidden aria-live="polite">
+    <h2>3. Result</h2>
 
-        <div class="row">
-            <div class="col-xs-12 col-md-3 col-sm-3">
-                December 2011-July 2013
-            </div>
-            <div class="col-xs-12 col-md-9 col-sm-9">
-                <a href="http://epyx.ch/">Epyx SA</a>, Lausanne (CH). <strong>Software Engineer</strong>. Front-end and
-                backend web development with Django, node.js and client-technologies. Server infrastructure
-                management (~25 machines), setup a fully automated environment using <a href="http://saltstack.org/">Salt
-                Stack</a> for configuration management. Trained a team of 5 developers to backend and frontend
-                development with the Django web framework. Provided assistance and code reviews. Setup tools and methods
-                to promote automated testing and shared responsibility.
-            </div>
-        </div>
+    <div class="field-head">
+      <strong>Authorization code</strong>
+      <span id="countdown" class="meta"></span>
+      <button class="ghost" type="button" data-copy="code">Copy</button>
+    </div>
+    <pre id="code"></pre>
+    <p id="stateCheck" class="meta"></p>
 
-        <div class="row">
-            <div class="col-xs-12 col-md-3 col-sm-3">
-                November 2010-December 2011
-            </div>
-            <div class="col-xs-12 col-md-9 col-sm-9">
-                <a href="http://mobilenuggets.com/">Mobile Nuggets</a>, Vevey (CH). <strong>Software developer</strong>.
-                Development and operation of mobile-oriented websites, web APIs for consumption by native mobile
-                applications and <a href="https://appnest.com/">appnest.com</a>, a platform for private distribution of
-                mobile applications.
-            </div>
-        </div>
+    <div class="field-head">
+      <strong>Try it on your backend</strong>
+      <button class="ghost" type="button" data-copy="snippet">Copy</button>
+    </div>
+    <pre id="snippet"></pre>
 
-        <div class="row">
-            <div class="col-xs-12 col-md-3 col-sm-3">
-                April-September 2010
-            </div>
-            <div class="col-xs-12 col-md-9 col-sm-9">
-                <a href="http://kmi.open.ac.uk/">Knowldege Media Institute</a>, The Open University. Milton Keynes (UK).
-                <strong>Statistical classification of web APIs</strong>. Used machine learning techniques to categorize
-                web APIs based on their documentation.
-            </div>
-        </div>
+    <div class="field-head"><strong>User (first authorization only)</strong></div>
+    <pre id="user"></pre>
+    <p id="userNote" class="meta"></p>
 
-        <div class="row">
-            <div class="col-md-3 col-sm-3">
-                May-September 2009
-            </div>
-            <div class="col-md-9 col-sm-9">
-                <a href="http://www.fry-it.com/">Fry-IT Ltd</a>, London (UK). <strong>Django/Python developer</strong>.
-                Designed and implemented internal and external systems in Python, mainly with the Django web framework.
-            </div>
-        </div>
+    <div class="field-head"><strong>id_token claims</strong></div>
+    <pre id="claims"></pre>
+    <p id="claimsNote" class="meta"></p>
+  </section>
 
-        <div class="row">
-            <div class="col-md-3 col-sm-3">
-                February 2008
-            </div>
-            <div class="col-md-9 col-sm-9">
-                <a href="http://www.csm-instruments.com/">CSM Instruments</a>, Peseux (CH). <strong>Setup of a
-                continuous integration server</strong>. Worked with the software R&amp;D team. Integrated <a
-                    href="http://trac.edgewall.org/">Trac</a>/SVN/<a href="http://bitten.edgewall.org/">Bitten</a>
-                servers. Set up test, build and reporting scripts.
-            </div>
-        </div>
-    </article>
+  <details class="card" open>
+    <summary>Setup checklist</summary>
+    <ol>
+      <li>Host this file over HTTPS on a domain you control (for GitHub Pages: put it at the root of a repository and turn on Pages under Settings).</li>
+      <li>If the Apple developer portal asks you to verify the domain, download <code>apple-developer-domain-association.txt</code> and serve it at <code>https://your-domain/.well-known/apple-developer-domain-association.txt</code>. On GitHub Pages this needs an empty <code>.nojekyll</code> file in the repository root, and the file must sit at the root of the domain (a <code>username.github.io</code> repository or a custom domain).</li>
+      <li>Open your Services ID, choose Sign in with Apple, then Configure. Select the primary App ID, add the domain above, and add the Redirect URI above as a Return URL, exactly as shown.</li>
+      <li>Enter the Services ID, sign in, and use the code within about five minutes. It works only once.</li>
+      <li>On your backend, call the client with <code>client_platform="web"</code>, and make sure its web redirect URI is exactly the Redirect URI above.</li>
+    </ol>
+    <p class="meta">This page sends nothing anywhere except to Apple’s own script and popup. Don’t share the code: it is a credential until it is used or expires.</p>
+  </details>
+</main>
 
-    <article>
-        <h2>Languages</h2>
+<script src="https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js"></script>
+<script>
+(() => {
+  "use strict";
 
-        <div class="row">
-            <div class="col-md-3 col-sm-3">
-                English
-            </div>
-            <div class="col-md-9 col-sm-9">
-                Fluent. TOEIC: 940.
-            </div>
-        </div>
+  const $ = (id) => document.getElementById(id);
+  const params = new URLSearchParams(location.search);
+  const storage = {
+    get(key) { try { return localStorage.getItem(key); } catch { return null; } },
+    set(key, value) { try { localStorage.setItem(key, value); } catch { /* ignore */ } },
+  };
 
-    </article>
+  // Prefill. ?clientId=...&redirectUri=... also work, handy for sharing a link.
+  $("clientId").value = params.get("clientId") || storage.get("clientId") || "";
+  $("redirectUri").value = params.get("redirectUri") || location.origin + location.pathname;
+  $("regDomain").textContent = location.hostname || "(none)";
 
-    <article>
-        <h2>Education and Qualifications</h2>
+  const localHosts = ["localhost", "127.0.0.1", "[::1]"];
+  if (location.protocol !== "https:" || localHosts.includes(location.hostname)) {
+    $("envWarning").hidden = false;
+  }
 
-        <div class="row">
-            <div class="col-md-3 col-sm-3">
-                2009-2010
-            </div>
-            <div class="col-md-9 col-sm-9">
-                <strong>Université Jean Monet, Saint-Étienne</strong>. <a
-                    href="http://depinfo.univ-st-etienne.fr/Master/">Master of <em>Web Intelligence</em></a>.
-            </div>
-        </div>
+  let timer = null;
+  let signingIn = false;
 
-    </article>
+  const randomString = () =>
+    Array.from(crypto.getRandomValues(new Uint8Array(16)), (b) =>
+      b.toString(16).padStart(2, "0")).join("");
 
-    <article>
-        <h2>Computer Science</h2>
+  function decodeJwt(token) {
+    const payload = token.split(".")[1];
+    const base64 = payload.replace(/-/g, "+").replace(/_/g, "/");
+    const bytes = Uint8Array.from(atob(base64), (c) => c.charCodeAt(0));
+    return JSON.parse(new TextDecoder().decode(bytes));
+  }
 
-        <div class="row">
-            <div class="col-md-3 col-sm-3">
-                Operating systems
-            </div>
-            <div class="col-md-9 col-sm-9">
-                <dl>
-                    <dt>Linux</dt>
-                    <dd>Intensive use since 2005. Strong experience with <a
-                            href="https://www.archlinux.org/">Archlinux</a>, Debian and Ubuntu distributions (desktop
-                        and server use).
-                    </dd>
-                    <dt>Mac OS X</dt>
-                    <dd>Occasional use</dd>
-                </dl>
-            </div>
-        </div>
+  function showError(message) {
+    const el = $("error");
+    el.textContent = message;
+    el.hidden = false;
+  }
 
-        <div class="row">
-            <div class="col-md-3 col-sm-3">
-                Languages
-            </div>
-            <div class="col-md-9 col-sm-9">
-                <dl>
-                    <dt>Python</dt>
-                    <dd>Strong knowledge of the <a href="http://www.python.org/">Python language</a> and ecosystem.
-                        Expertise of the <a href="https://www.djangoproject.com/">Django web framework</a>, occasional
-                        contributor and author of <a href="http://code.activestate.com/pypm/author:Bruno-Renie/">several
-                            open-source packages</a>.
-                    </dd>
-                    <dt>Javascript</dt>
-                    <dd>Good knowledge of Javascript and some of its frameworks: <a href="http://angularjs.org/">AngularJS</a>,
-                        <a href="http://jquery.com/">jQuery</a>, <a href="http://www.openlayers.org/">OpenLayers</a>, <a
-                                href="http://mbostock.github.com/d3/">d3.js</a>.
-                    </dd>
-                    <dt>Clojure</dt>
-                    <dd>Occasional use of Clojure/ClojureScript to write web applications with <a
-                            href="https://github.com/omcljs/om">Om</a>, a ClojureScript interface to <a
-                            href="https://facebook.github.io/react/">React.js</a>.
-                    </dd>
-                    <dt>Markup and formats</dt>
-                    <dd>HTML, CSS (<a href="http://sass-lang.com/">SASS</a>), XML, JSON</dd>
-                    <dt>Other (past) languages</dt>
-                    <dd>C, PHP, Java</dd>
-                </dl>
-            </div>
-        </div>
+  function reset() {
+    clearInterval(timer);
+    $("error").hidden = true;
+    $("result").hidden = true;
+  }
 
-        <div class="row">
-            <div class="col-md-3 col-sm-3">
-                Methods and tools
-            </div>
-            <div class="col-md-9 col-sm-9">
-                <dl>
-                    <dt>Project methodology</dt>
-                    <dd>Continuous integration and streamlined deployment zealot. Familiarity with agility.</dd>
-                    <dt>Version control</dt>
-                    <dd><a href="http://git-scm.com/">Git</a>, <a href="http://mercurial.selenic.com/">Mercurial</a>
-                    </dd>
-                    <dt>Configuration management and automation</dt>
-                    <dd><a href="http://puppetlabs.com/puppet/puppet-open-source">Puppet</a>, <a
-                            href="http://saltstack.org/">Salt</a>, <a href="http://fabfile.org/">Fabric</a>, <a
-                            href="https://docker.com/">Docker</a></dd>
-                </dl>
-            </div>
-        </div>
+  function describeError(err) {
+    const code = (err && (err.error || err.message)) || String(err);
+    if (code === "popup_closed_by_user") return "The popup was closed before sign-in finished.";
+    if (code === "user_cancelled_authorize") return "Sign-in was cancelled.";
+    return "Sign-in failed (" + code + "). Check that the Services ID, the domain and the " +
+      "Redirect URI match what is registered with Apple, and that popups are allowed.";
+  }
 
-        <div class="row">
-            <div class="col-md-3 col-sm-3">
-                Databases
-            </div>
-            <div class="col-md-9 col-sm-9">
-                <dl>
-                    <dt>Relational (SQL)</dt>
-                    <dd><a href="http://www.postgresql.org/">PostgreSQL</a> (<a href="http://postgis.refractions.net/">postGIS</a>),
-                        SQLite.
-                    </dd>
-                    <dt>Non-relational</dt>
-                    <dd><a href="http://redis.io/">Redis</a>, <a href="http://www.elasticsearch.com/">elasticsearch</a>,
-                        <a href="http://couchdb.apache.org/">CouchDB</a>.
-                    </dd>
-                </dl>
-            </div>
-        </div>
-    </article>
+  function startCountdown() {
+    clearInterval(timer);
+    const end = Date.now() + 5 * 60 * 1000;
+    const el = $("countdown");
+    const tick = () => {
+      const left = Math.max(0, Math.round((end - Date.now()) / 1000));
+      const minutes = Math.floor(left / 60);
+      const seconds = String(left % 60).padStart(2, "0");
+      el.textContent = left > 0
+        ? "single use, about " + minutes + ":" + seconds + " left"
+        : "expired: sign in again for a new code";
+      el.className = left > 0 ? "meta" : "meta bad";
+      if (left === 0) clearInterval(timer);
+    };
+    tick();
+    timer = setInterval(tick, 1000);
+  }
 
-    <article>
-        <h2>Personal interests</h2>
+  function showResult(data, state, clientId, redirectURI) {
+    const auth = data.authorization || {};
 
-        <div class="row">
-            <div class="col-md-3 col-sm-3">
-                Scouting
-            </div>
-            <div class="col-md-9 col-sm-9">
-                Scout leader, holder of a 2<sup>nd</sup> degree licence (diploma for youth leaders and workers).
-            </div>
-        </div>
+    $("code").textContent = auth.code || "(no code returned)";
+    startCountdown();
 
-        <div class="row">
-            <div class="col-md-3 col-sm-3">
-                Mountaineering
-            </div>
-            <div class="col-md-9 col-sm-9">
-                Regular practice of rock climbing, ski touring and mountaineering. Rock climbing instructor.
-            </div>
-        </div>
-    </article>
-</div>
+    const stateOk = auth.state === state;
+    $("stateCheck").textContent = stateOk
+      ? "State matches the value this page sent."
+      : "State mismatch: do not trust this response.";
+    $("stateCheck").className = stateOk ? "meta ok" : "meta bad";
 
+    $("snippet").textContent =
+      '# the backend\'s redirect_uris["web"] must be exactly: ' + redirectURI + "\n" +
+      'payload = client.authenticate("' + (auth.code || "<no code>") + '", client_platform="web")';
 
+    if (data.user) {
+      $("user").textContent = JSON.stringify(data.user, null, 2);
+      $("userNote").textContent = "Returned only on the first authorization: store it now.";
+    } else {
+      $("user").textContent = "(not returned)";
+      $("userNote").textContent =
+        "Apple sends this only the first time an Apple ID authorizes this Services ID. " +
+        "To see it again, stop using the Apple ID for this app in its Sign in with Apple " +
+        "settings at appleid.apple.com.";
+    }
+
+    try {
+      const claims = decodeJwt(auth.id_token);
+      const audOk = claims.aud === clientId;
+      const exp = claims.exp ? new Date(claims.exp * 1000).toLocaleString() : "unknown";
+      $("claims").textContent = JSON.stringify(claims, null, 2);
+      $("claimsNote").textContent =
+        "Decoded in your browser, signature not verified. aud " +
+        (audOk ? "matches" : "does NOT match") + " the Services ID; expires " + exp + ".";
+    } catch {
+      $("claims").textContent = "(no id_token returned, or it could not be decoded)";
+      $("claimsNote").textContent = "";
+    }
+
+    $("result").hidden = false;
+  }
+
+  async function signIn() {
+    if (signingIn) return;
+    reset();
+
+    const clientId = $("clientId").value.trim();
+    const redirectURI = $("redirectUri").value.trim();
+    if (!clientId || !redirectURI) {
+      showError("Enter the Services ID and the Redirect URI first.");
+      return;
+    }
+    if (!window.AppleID) {
+      showError("Apple’s sign-in script did not load. Check your connection or an ad blocker.");
+      return;
+    }
+
+    storage.set("clientId", clientId);
+    const scope = Array.from(
+      document.querySelectorAll("input[name=scope]:checked"), (el) => el.value
+    ).join(" ");
+    const state = randomString();
+    const nonce = randomString();
+
+    signingIn = true;
+    $("signIn").disabled = true;
+    try {
+      // init and signIn run in the same click handler so the popup isn't blocked.
+      AppleID.auth.init({ clientId, scope, redirectURI, state, nonce, usePopup: true });
+      const data = await AppleID.auth.signIn();
+      showResult(data, state, clientId, redirectURI);
+    } catch (err) {
+      showError(describeError(err));
+    } finally {
+      signingIn = false;
+      $("signIn").disabled = false;
+    }
+  }
+
+  $("signIn").addEventListener("click", signIn);
+
+  document.addEventListener("click", async (event) => {
+    const button = event.target.closest("[data-copy]");
+    if (!button) return;
+    const source = $(button.dataset.copy);
+    const text = "value" in source ? source.value : source.textContent;
+    const label = button.textContent;
+    try {
+      await navigator.clipboard.writeText(text);
+      button.textContent = "Copied";
+    } catch {
+      button.textContent = "Copy failed";
+    }
+    setTimeout(() => { button.textContent = label; }, 1500);
+  });
+})();
+</script>
 </body>
 </html>
